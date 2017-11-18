@@ -1,0 +1,52 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_splash"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/splash_padding_bottom">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/splash_icon_padding_bottom"
+        android:layout_above="@+id/layoutBelow"
+        android:gravity="center_horizontal|center_vertical"
+        android:orientation="vertical">
+        <ImageView
+            android:layout_width="@dimen/splash_icon_size"
+            android:layout_height="@dimen/splash_icon_size"
+            android:background="@drawable/inbox_big_icon" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textSize="@dimen/splash_text_size"
+            android:text="@string/app_name"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutBelow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true">
+
+        <TextView
+            android:id="@+id/textViewCopyright"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/textViewVersion"
+            android:layout_gravity="center_horizontal"
+            android:textSize="@dimen/normal_text_size"
+            android:text="@string/copyright"/>
+
+        <TextView
+            android:id="@+id/textViewVersion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center_horizontal"
+            android:textSize="@dimen/normal_text_size"
+            android:text="@string/version"/>
+    </LinearLayout>
+</RelativeLayout>

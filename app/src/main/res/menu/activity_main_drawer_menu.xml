@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/menu_inbox_common"
+            android:icon="@drawable/ic_menu_inbox_common"
+            android:title="@string/inbox_common" />
+        <item
+            android:id="@+id/menu_inbox_security"
+            android:icon="@drawable/ic_menu_inbox_security"
+            android:title="@string/inbox_security" />
+    </group>
+
+    <item android:title="@string/communicate">
+        <menu>
+            <item
+                android:id="@+id/menu_blocked_call_sms"
+                android:icon="@drawable/ic_blocked_call_sms"
+                android:title="@string/blocked_call_sms" />
+            <item
+                android:id="@+id/menu_setting"
+                android:icon="@drawable/ic_menu_setting"
+                android:title="@string/setting" />
+            <item
+                android:id="@+id/menu_share"
+                android:icon="@drawable/ic_menu_fb"
+                android:title="@string/share_facebook" />
+            <item
+                android:id="@+id/menu_rating"
+                android:icon="@drawable/ic_menu_rating"
+                android:title="@string/rating" />
+        </menu>
+    </item>
+</menu>
