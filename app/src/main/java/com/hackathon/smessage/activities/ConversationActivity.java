@@ -4,10 +4,14 @@ import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,6 +31,7 @@ import com.hackathon.smessage.utils.TimeUtils;
 import com.hackathon.smessage.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class ConversationActivity extends DefaultActivity {
 
@@ -41,6 +46,9 @@ public class ConversationActivity extends DefaultActivity {
 
     private BroadcastReceiver mBroadcastSending;
     private ArrayList<Message> mSendingStack;
+
+    private SearchView mSearchView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +61,32 @@ public class ConversationActivity extends DefaultActivity {
 
 
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(mConversationAdapter != null){
+            MessageOpearation.getInstance().getConversation(mCurrentMessage);
+            updateConversation();
+        }
+        registerReceiver(mBroadcastSending, new IntentFilter(Defines.ACTION_SEND_SMS));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.activity_main_option, menu);
+        showSearch(menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(mBroadcastSending);
+    }
+
     private void init() {
         Intent intent = getIntent();
         mCurrentMessage = (Message)intent.getSerializableExtra(Defines.PASS_MESSAGE_FROM_INBOX_TO_CONVERSATION);
@@ -61,6 +95,16 @@ public class ConversationActivity extends DefaultActivity {
         mConversationList = MessageOpearation.getInstance().getConversation(mCurrentMessage);
         mConversationAdapter = new ConversationArrayAdapter(this, R.layout.item_message_conversation, mConversationList);
         mSendingStack = new ArrayList<>();
+
+        //update inbox if have SMS incoming
+        mBroadcastReceivedSMS = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                //reload after receive sms
+                updateConversation();
+            }
+        };
+
         //receive status
         mBroadcastSending = new BroadcastReceiver() {
             @Override
@@ -132,6 +176,8 @@ public class ConversationActivity extends DefaultActivity {
                 mEtEnterMessage.setText("");
             }
         });
+
+
     }
     private void updateConversation(){
         mConversationAdapter.notifyDataSetChanged();
@@ -181,5 +227,23 @@ public class ConversationActivity extends DefaultActivity {
             sendSms.decrypt(); //decrypt to show
         }
         updateConversation();
+    }
+
+    private void showSearch(Menu menu){
+        mSearchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+        mSearchView.setQueryHint(getString(R.string.search_hint));
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                String query = newText.toLowerCase(Locale.getDefault());
+                mConversationAdapter.filter(query);
+                return false;
+            }
+        });
     }
 }

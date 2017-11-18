@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/password_setting">
+        <SwitchPreference
+            android:key="@string/key_privacy_inbox_security_enable_password"
+            android:icon="@drawable/ic_locked"
+            android:defaultValue="false"
+            android:title="@string/enable_password" />
+
+        <Preference
+            android:key="@string/key_privacy_inbox_security_change_password"
+            android:dependency="@string/key_privacy_inbox_security_enable_password"
+            android:title="@string/change_password"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory>
+        <SwitchPreference
+            android:key="@string/key_privacy_inbox_security_notification"
+            android:icon="@drawable/ic_notifications"
+            android:defaultValue="true"
+            android:title="@string/notification" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:dependency="@string/key_privacy_inbox_security_notification"
+            android:key="@string/key_privacy_inbox_security_ring"
+            android:title="@string/ring"/>
+
+        <CheckBoxPreference
+            android:key="@string/key_privacy_inbox_security_vibrate"
+            android:defaultValue="true"
+            android:dependency="@string/key_privacy_inbox_security_notification"
+            android:title="@string/vibrate" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:dependency="@string/key_privacy_inbox_security_notification"
+            android:key="@string/key_privacy_inbox_security_status_bar"
+            android:title="@string/status_bar"
+            android:summary="@string/status_bar_summary"/>
+
+        <CheckBoxPreference
+            android:key="@string/key_privacy_inbox_security_unread_message"
+            android:defaultValue="true"
+            android:dependency="@string/key_privacy_inbox_security_notification"
+            android:title="@string/unread_message"
+            android:summary="@string/unread_message_summary"/>
+
+        <CheckBoxPreference
+            android:key="@string/key_privacy_inbox_security_reply_popup"
+            android:defaultValue="true"
+            android:dependency="@string/key_privacy_inbox_security_notification"
+            android:title="@string/reply_popup"
+            android:summary="@string/reply_popup_summary"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>

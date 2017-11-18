@@ -47,6 +47,12 @@
                 <data android:scheme="mmsto" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activities.SettingsActivity"
+            android:label="@string/setting"
+            android:parentActivityName=".activities.MainActivity"
+            android:screenOrientation="portrait" />
+
         <service
             android:name=".receivers.HeadlessSmsSendService"
             android:exported="true"

@@ -96,4 +96,7 @@
     <string name="key_privacy_inbox_security_vibrate">key_privacy_inbox_security_vibrate</string>
     <string name="key_privacy_inbox_security_unread_message">key_privacy_inbox_security_unread_message</string>
     <string name="key_privacy_inbox_security_reply_popup">key_privacy_inbox_security_reply_popup</string>
+
+    <!-- search-->
+    <string name="search_hint"> Search</string>
 </resources>

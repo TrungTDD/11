@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <Preference
+        android:key="@string/key_common_privacy"
+        android:persistent="false"
+        android:icon="@drawable/ic_inbox_common"
+        android:title="@string/common_privacy" />
+
+    <Preference
+        android:key="@string/key_security_privacy"
+        android:persistent="false"
+        android:icon="@drawable/ic_inbox_security"
+        android:title="@string/security_privacy" />
+
+    <RingtonePreference
+        android:key="@string/key_ring_choice"
+        android:persistent="false"
+        android:icon="@drawable/ic_rings"
+        android:title="@string/rings" />
+
+    <ListPreference
+        android:key="@string/key_language"
+        android:title="@string/languages"
+        android:icon="@drawable/ic_language"
+        android:dialogIcon="@drawable/ic_language"
+        android:entries="@array/languages"
+        android:entryValues="@array/languages_key"
+        android:defaultValue="@string/key_english"/>
+</PreferenceScreen> 

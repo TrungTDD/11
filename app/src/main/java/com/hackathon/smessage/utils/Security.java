@@ -26,4 +26,8 @@ public class Security {
     public String decrypt(String message){
         return new StringBuffer(message).reverse().toString();
     }
+
+    public boolean isSecurity(String message){
+        return false;
+    }
 }

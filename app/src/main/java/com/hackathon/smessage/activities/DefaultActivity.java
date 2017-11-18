@@ -6,6 +6,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.hackathon.smessage.configs.AppConfigs;
 import com.hackathon.smessage.configs.Defines;
 import com.hackathon.smessage.controllers.ContactOpearation;
 import com.hackathon.smessage.sqlitehelper.SqliteHelper;
@@ -29,7 +30,9 @@ public class DefaultActivity extends AppCompatActivity {
         if(!SqliteHelper.isInitialized()){
             SqliteHelper.init(this);
         }
-
+        if(!AppConfigs.getInstance().isInitialized()){
+            AppConfigs.getInstance().init(this);
+        }
     }
 
     @Override
@@ -48,7 +51,7 @@ public class DefaultActivity extends AppCompatActivity {
         if(mBroadcastReceivedSMS != null){
             registerReceiver(mBroadcastReceivedSMS, mIntentFilterSMS);
         }
-
+        AppConfigs.getInstance().setIsAppRunning(true);
     }
 
     @Override
@@ -57,6 +60,7 @@ public class DefaultActivity extends AppCompatActivity {
         if(mBroadcastReceivedSMS != null){
             unregisterReceiver(mBroadcastReceivedSMS);
         }
+        AppConfigs.getInstance().setIsAppRunning(false);
     }
 
     @Override

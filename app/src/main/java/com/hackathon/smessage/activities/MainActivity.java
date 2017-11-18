@@ -1,5 +1,7 @@
 package com.hackathon.smessage.activities;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
@@ -57,6 +59,7 @@ public class MainActivity extends DefaultActivity {
     private SearchView mSearchView;
     private SearchAllMessageAdapter mSearchAllMessageAdapter;
     private ArrayList<Message> mListAllMessage;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,6 +132,16 @@ public class MainActivity extends DefaultActivity {
                     start();
             }
         };
+
+        //update inbox if have SMS incoming
+        mBroadcastReceivedSMS = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                //reload after receive sms
+                updateInbox(AppConfigs.getInstance().isSecurity());
+            }
+        };
+
         if(PermissionUtils.isAllPermissionAlready(this)) {
             init();
         }
@@ -209,7 +222,7 @@ public class MainActivity extends DefaultActivity {
                     case R.id.menu_blocked_call_sms:
                         break;
                     case R.id.menu_setting:
-
+                        startActivity(new Intent(MainActivity.this, SettingsActivity.class));
                         break;
                 }
                 mDrawerLayout.closeDrawer(Gravity.START);
@@ -266,7 +279,7 @@ public class MainActivity extends DefaultActivity {
 
     private void showSearch(Menu menu){
         mSearchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
-        mSearchView.setQueryHint("Search");
+        mSearchView.setQueryHint(getString(R.string.search_hint));
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -283,8 +296,7 @@ public class MainActivity extends DefaultActivity {
                     mLvInbox.setAdapter(mSearchAllMessageAdapter);
                     mSearchAllMessageAdapter.filter(query);
                 }
-
-                return false;
+                return true;
             }
         });
     }
