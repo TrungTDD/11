@@ -1,6 +1,8 @@
 package com.hackathon.smessage.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,11 +11,14 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hackathon.smessage.R;
+import com.hackathon.smessage.configs.Defines;
 import com.hackathon.smessage.customViews.CircularImageView;
 import com.hackathon.smessage.models.Contact;
 import com.hackathon.smessage.models.Message;
+import com.hackathon.smessage.utils.TimeUtils;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -63,10 +68,10 @@ public class SearchAllMessageAdapter extends BaseAdapter{
             view = inflater.inflate(R.layout.item_search, null);
 
             viewHolder = new ViewHolder();
-            viewHolder.tvName =  view.findViewById(R.id.tvNameSeach);
+            viewHolder.tvName =  view.findViewById(R.id.tvNameSearch);
             viewHolder.tvBody =  view.findViewById(R.id.tvMessageSearch);
             viewHolder.tvTime =  view.findViewById(R.id.tvTimeSearch);
-            viewHolder.ivAvatar = view.findViewById(R.id.ivAvatarSearch);
+            viewHolder.ivAvatar = (CircularImageView) view.findViewById(R.id.ivAvatarSearch);
 
             view.setTag(viewHolder);
         }
@@ -75,18 +80,24 @@ public class SearchAllMessageAdapter extends BaseAdapter{
         }
 
         Message message = mList.get(i);
-        viewHolder.tvName.setText(message.getPhone());
-        viewHolder.tvBody.setText(message.getBody());
-        viewHolder.tvTime.setText(message.getDate());
-        Contact contact = message.getContact();
 
+        viewHolder.tvBody.setText(message.getBody());
+        //set today or full time later
+        String format = TimeUtils.getInstance().isToday(message.getDate()) ? TimeUtils.TIME_FORMAT : TimeUtils.DATE_FORMAT;
+        String dateFormat = TimeUtils.getInstance().getTimeFormat(format, message.getDate());
+        viewHolder.tvTime.setText(dateFormat);
+
+        Contact contact = message.getContact();
         //set Icon late
         if (contact.getPhotoUri() == null){
+
             viewHolder.ivAvatar.setImageResource(R.drawable.fake_face);
         }
         else{
             viewHolder.ivAvatar.setImageURI(Uri.parse(contact.getPhotoUri()));
         }
+
+        viewHolder.tvName.setText(contact.getName());
         return view;
     }
 
@@ -105,7 +116,8 @@ public class SearchAllMessageAdapter extends BaseAdapter{
             for(Message message : tmpList){
                 if(message.getPhone().toLowerCase(Locale.getDefault()).contains(query) ||
                         message.getBody().toLowerCase(Locale.getDefault()).contains(query) ||
-                        String.valueOf(message.getUnreadNumber()).contains(query) ){
+                        String.valueOf(message.getUnreadNumber()).contains(query) ||
+                        message.getContact().getName().toLowerCase(Locale.getDefault()).contains(query)){
                     mList.add(message);
                 }
             }

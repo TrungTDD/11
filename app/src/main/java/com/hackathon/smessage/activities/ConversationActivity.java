@@ -1,17 +1,24 @@
 package com.hackathon.smessage.activities;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.provider.ContactsContract;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -46,6 +53,9 @@ public class ConversationActivity extends DefaultActivity {
 
     private BroadcastReceiver mBroadcastSending;
     private ArrayList<Message> mSendingStack;
+    private boolean isNewContact;
+    private MenuItem tvOption;
+    private Contact contact;
 
     private SearchView mSearchView;
 
@@ -68,6 +78,16 @@ public class ConversationActivity extends DefaultActivity {
         if(mConversationAdapter != null){
             MessageOpearation.getInstance().getConversation(mCurrentMessage);
             updateConversation();
+            contact = ContactOpearation.getInstance().getContactWithPhoneNumber(mCurrentMessage.getPhone());
+            if(contact != null) {
+                setTitle(contact.getName());
+                mCurrentMessage.setContact(contact);
+                if(isNewContact) {
+                    tvOption.setTitle(R.string.view_contact);
+                    isNewContact= false;
+                }
+            }
+
         }
         registerReceiver(mBroadcastSending, new IntentFilter(Defines.ACTION_SEND_SMS));
     }
@@ -75,11 +95,32 @@ public class ConversationActivity extends DefaultActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.activity_main_option, menu);
+        inflater.inflate(R.menu.conversation_option, menu);
         showSearch(menu);
-
+        tvOption = menu.findItem(R.id.itemViewOrAdd);
+        if(!isNewContact ){
+            menu.findItem(R.id.itemViewOrAdd).setTitle(R.string.view_contact);
+        }else{
+            menu.findItem(R.id.itemViewOrAdd).setTitle(R.string.add_contact);
+        }
         return super.onCreateOptionsMenu(menu);
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if(id == R.id.itemViewOrAdd){
+            if(!isNewContact){
+                showContactDetail();
+            }else{
+                addNewContact(mCurrentMessage.getPhone());
+            }
+        }else if(id == R.id.callContact){
+            dialCall(mCurrentMessage.getPhone());
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     @Override
     protected void onPause() {
@@ -88,13 +129,22 @@ public class ConversationActivity extends DefaultActivity {
     }
 
     private void init() {
+        contact = null;
+        isNewContact = false;
         Intent intent = getIntent();
         mCurrentMessage = (Message)intent.getSerializableExtra(Defines.PASS_MESSAGE_FROM_INBOX_TO_CONVERSATION);
-
-
         mConversationList = MessageOpearation.getInstance().getConversation(mCurrentMessage);
         mConversationAdapter = new ConversationArrayAdapter(this, R.layout.item_message_conversation, mConversationList);
         mSendingStack = new ArrayList<>();
+
+        //checking is New contact
+        contact = ContactOpearation.getInstance().getContactWithPhoneNumber(mCurrentMessage.getPhone());
+        if(contact==null) {
+            isNewContact = true;
+        }else{
+            isNewContact = false;
+        }
+
 
         //update inbox if have SMS incoming
         mBroadcastReceivedSMS = new BroadcastReceiver() {
@@ -246,4 +296,28 @@ public class ConversationActivity extends DefaultActivity {
             }
         });
     }
+
+    private void showContactDetail(){
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI,""+ contact.getId()));
+        startActivity(intent);
+    }
+
+    private void addNewContact(String phone){
+        Intent intent = new Intent(Intent.ACTION_INSERT);
+        intent.setType(ContactsContract.Contacts.CONTENT_TYPE);
+        intent.putExtra(ContactsContract.Intents.Insert.PHONE, phone);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
+    }
+
+    private void dialCall(String phone){
+        String url = "tel:" + phone;
+        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse(url));
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        startActivity(intent);
+    }
+
 }

@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
 
+import com.hackathon.smessage.activities.ReplyMessageActivity;
 import com.hackathon.smessage.configs.AppConfigs;
 import com.hackathon.smessage.configs.Defines;
 import com.hackathon.smessage.controllers.MessageOpearation;
@@ -86,7 +87,10 @@ public class ReceiveSMS extends BroadcastReceiver {
     }
 
     private void showReply(Context context, Message message){
-
+        Intent intent = new Intent(context, ReplyMessageActivity.class);
+        intent.putExtra(Defines.PASS_MESSAGE_FROM_RECEIVER, message);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
     }
 
     private void sendBroadcastToApp(Context context, Message message){

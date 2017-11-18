@@ -16,6 +16,7 @@ import com.hackathon.smessage.models.Message;
 import com.hackathon.smessage.utils.TimeUtils;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * Created by tai.nguyenduc on 11/18/2017.
@@ -26,13 +27,18 @@ public class ConversationArrayAdapter extends ArrayAdapter<Message> {
     private Context mContext;
     private int mLayout;
     private ArrayList<Message> mList;
+    private ArrayList<Message> tmpList;
 
     public ConversationArrayAdapter(Context context, int resource, ArrayList<Message> list) {
         super(context, resource, list);
         mContext = context;
         mLayout = resource;
         mList = list;
+
+        tmpList = new ArrayList<>();
+        tmpList.addAll(list);
     }
+
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -115,5 +121,23 @@ public class ConversationArrayAdapter extends ArrayAdapter<Message> {
         public TextView tvTimeMe, tvTimeYou;
         public TextView tvFailedMe;
         public Button btnRetryMe;
+    }
+
+    public void filter(String query){
+        query = query.toLowerCase(Locale.getDefault());
+        mList.clear();
+        if(query.length() == 0){
+            mList.addAll(tmpList);
+        }
+        else {
+            for(Message message: tmpList){
+                if(message.getPhone().toLowerCase(Locale.getDefault()).contains(query) ||
+                        message.getBody().toLowerCase(Locale.getDefault()).contains(query) ||
+                        String.valueOf(message.getUnreadNumber()).toLowerCase(Locale.getDefault()).contains(query)){
+                    mList.add(message);
+                }
+            }
+        }
+        notifyDataSetChanged();
     }
 }

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_checked_all"
+        android:icon="@android:drawable/checkbox_off_background"
+        android:title="@string/all"
+        android:checkable="true"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/menu_delete"
+        android:icon="@android:drawable/ic_menu_delete"
+        android:title="@string/delete"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/menu_block_call"
+        android:title="@string/block_call"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/menu_block_sms"
+        android:title="@string/block_message"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/menu_turn_off_ringtune"
+        android:title="@string/turn_off_ringtune"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/menu_set_new_ringtune"
+        android:title="@string/set_new_ringtune"
+        app:showAsAction="never"/>
+
+</menu>

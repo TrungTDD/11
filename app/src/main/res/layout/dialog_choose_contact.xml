@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/dialog_choose_contact_padding">
+
+    <AutoCompleteTextView
+        android:id="@+id/acPhone"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical"
+        android:hint="@string/hint_enter_contact"
+        android:completionThreshold="1"/>
+
+    <Space
+        android:layout_width="@dimen/normal_space"
+        android:layout_height="match_parent" />
+    <Button
+        android:id="@+id/btnContact"
+        android:layout_width="@dimen/dialog_choose_contact_icon_size"
+        android:layout_height="@dimen/dialog_choose_contact_icon_size"
+        android:layout_gravity="center_vertical"
+        android:text="..."/>
+
+</LinearLayout>

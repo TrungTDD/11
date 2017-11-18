@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layouPopup"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/pop_up_line_bg"/>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vpConversation"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_pop_up_message_height"
+        android:padding="@dimen/normal_space"/>
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabDots"
+        android:layout_width="@dimen/item_pop_up_tab_dot_width"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        app:tabBackground="@drawable/tab_selector"
+        app:tabGravity="center"
+        app:tabIndicatorHeight="0dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/pop_up_line_bg"/>
+
+
+    <RelativeLayout
+        android:id="@+id/layoutControlSend"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/activity_conversation_layout_enter_message_bg"
+        android:paddingTop="@dimen/main_activity_no_conversation_padding_top_bottom"
+        android:paddingBottom="@dimen/main_activity_no_conversation_padding_top_bottom"
+        android:paddingLeft="@dimen/main_activity_no_conversation_padding_left_right"
+        android:paddingRight="@dimen/main_activity_no_conversation_padding_left_right"
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true">
+
+        <EditText
+            android:id="@+id/etEnterMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="55dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/normal_space"
+            android:layout_toLeftOf="@+id/layoutRight"
+            android:layout_toStartOf="@+id/layoutRight"
+            android:hint="@string/enter_message_hint"
+            android:textSize="@dimen/normal_text_size"
+            android:background="@drawable/send_message_bg"/>
+
+        <LinearLayout
+            android:id="@+id/layoutRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignBottom="@+id/etEnterMessage"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvMessageCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="165/2" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/normal_space" />
+
+            <FrameLayout
+                android:layout_width="@dimen/main_activity_no_conversation_send_icon_size"
+                android:layout_height="@dimen/main_activity_no_conversation_send_icon_size"
+                android:layout_gravity="center_horizontal">
+                <Button
+                    android:id="@+id/btnSend"
+                    android:layout_width="@dimen/main_activity_no_conversation_send_icon_size"
+                    android:layout_height="@dimen/main_activity_no_conversation_send_icon_size"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/ic_send_sms"/>
+                <ProgressBar
+                    android:id="@+id/pbWWaiting"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </FrameLayout>
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>

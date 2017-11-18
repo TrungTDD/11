@@ -19,6 +19,7 @@ import com.hackathon.smessage.models.Message;
 import com.hackathon.smessage.utils.TimeUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
 
 import static android.view.View.GONE;
@@ -32,16 +33,60 @@ public class InboxArrayAdapter extends ArrayAdapter<Message> {
     private Context mContext;
     private int mLayout;
     private ArrayList<Message> mList;
-    private ArrayList<Message> tmpList;
+    private HashMap<Integer, Boolean> mSelected = new HashMap<Integer, Boolean>();
 
     public InboxArrayAdapter(Context context, int resource, ArrayList<Message> list) {
         super(context, resource, list);
         mContext = context;
         mLayout = resource;
         mList = list;
-        tmpList = new ArrayList<>();
-        tmpList.addAll(list);
     }
+
+
+    public int getCheckedCount(){
+        int count = 0;
+        for(int i = 0; i < mList.size(); i++){
+            if(isItemChecked(i)){
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public void setItemChecked(int position, boolean value) {
+        mSelected.put(position, value);
+        notifyDataSetChanged();
+    }
+
+    public void setAllChecked(boolean value) {
+        for(int i = 0; i < mList.size(); i++) {
+            mSelected.put(i, value);
+        }
+        notifyDataSetChanged();
+    }
+
+    public boolean isItemChecked(int position){
+        Boolean icChecked = mSelected.get(position);
+        if(icChecked == null){
+            return false;
+        }
+        return icChecked;
+    }
+
+    public boolean isAllChecked(){
+        if(getCheckedCount() == mList.size()){
+            return true;
+        }
+        return false;
+    }
+
+    public void clear() {
+        mSelected.clear();
+        notifyDataSetChanged();
+    }
+
+
+
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -125,6 +170,10 @@ public class InboxArrayAdapter extends ArrayAdapter<Message> {
         else{
             viewHolder.tvLine.setVisibility(View.VISIBLE);
         }
+        //set avatar if selected
+        if(isItemChecked(position)){
+            viewHolder.ivAvatar.setImageResource(R.drawable.ic_selected_conversation);
+        }
 
         return convertView;
     }
@@ -134,21 +183,4 @@ public class InboxArrayAdapter extends ArrayAdapter<Message> {
         public TextView tvName, tvFailed, tvUnreadNumber, tvMessage, tvTime, tvLine;
     }
 
-    public void filter(String query){
-        query = query.toLowerCase(Locale.getDefault());
-        mList.clear();
-        if(query.length() == 0){
-            mList.addAll(tmpList);
-        }
-        else {
-            for(Message message: tmpList){
-                if(message.getPhone().toLowerCase(Locale.getDefault()).contains(query) ||
-                        message.getBody().toLowerCase(Locale.getDefault()).contains(query) ||
-                        String.valueOf(message.getUnreadNumber()).toLowerCase(Locale.getDefault()).contains(query)){
-                    mList.add(message);
-                }
-            }
-        }
-        notifyDataSetChanged();
-    }
 }

@@ -111,4 +111,55 @@ public class AppConfigs {
         return mSharedPreferences.getString(mContext.getString(R.string.key_password_inbox_common), "");
     }
 
+    public void setRing(boolean isSecurity, boolean isRing){
+        String key = mContext.getString(R.string.key_privacy_inbox_common_ring);
+        if(isSecurity){
+            key = mContext.getString(R.string.key_privacy_inbox_security_ring);
+        }
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putBoolean(key, isRing);
+        editor.commit();
+    }
+
+    public boolean isRing(boolean isSecurity){
+        if(isSecurity){
+            return mSharedPreferences.getBoolean(mContext.getString(R.string.key_privacy_inbox_security_ring), false);
+        }
+        return mSharedPreferences.getBoolean(mContext.getString(R.string.key_privacy_inbox_common_ring), false);
+    }
+
+    public void setVibrate(boolean isSecurity, boolean isVibrate){
+        String key = mContext.getString(R.string.key_privacy_inbox_common_vibrate);
+        if(isSecurity){
+            key = mContext.getString(R.string.key_privacy_inbox_security_vibrate);
+        }
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putBoolean(key, isVibrate);
+        editor.commit();
+    }
+
+    public boolean isVibrate(boolean isSecurity){
+        if(isSecurity){
+            return mSharedPreferences.getBoolean(mContext.getString(R.string.key_privacy_inbox_security_vibrate), false);
+        }
+        return mSharedPreferences.getBoolean(mContext.getString(R.string.key_privacy_inbox_common_vibrate), false);
+    }
+
+    public void setStatusBar(boolean isSecurity, boolean isShowStatus){
+        String key = mContext.getString(R.string.key_privacy_inbox_common_status_bar);
+        if(isSecurity){
+            key = mContext.getString(R.string.key_privacy_inbox_security_status_bar);
+        }
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putBoolean(key, isShowStatus);
+        editor.commit();
+    }
+
+    public boolean isStatusBar(boolean isSecurity){
+        if(isSecurity){
+            return mSharedPreferences.getBoolean(mContext.getString(R.string.key_privacy_inbox_security_status_bar), false);
+        }
+        return mSharedPreferences.getBoolean(mContext.getString(R.string.key_privacy_inbox_common_status_bar), false);
+    }
+
 }

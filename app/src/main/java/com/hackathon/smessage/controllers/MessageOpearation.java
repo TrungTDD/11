@@ -382,7 +382,7 @@ public class MessageOpearation {
         String message = "This is a message!";
         //normal message
         Utils.LOG("Fake data normal message");
-        int phone = 987654320;
+        int phone = 905257969;
         for(int i = 0; i < messageCount; i++){
             String strPhone = "0" + (phone + i);
             for(int j = 0; j < conversation; j++) {
