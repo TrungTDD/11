@@ -12,11 +12,14 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.hackathon.smessage.R;
+import com.hackathon.smessage.configs.Defines;
+import com.hackathon.smessage.customViews.CircularImageView;
 import com.hackathon.smessage.models.Contact;
 import com.hackathon.smessage.models.Message;
 import com.hackathon.smessage.utils.TimeUtils;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import static android.view.View.GONE;
 
@@ -29,12 +32,15 @@ public class InboxArrayAdapter extends ArrayAdapter<Message> {
     private Context mContext;
     private int mLayout;
     private ArrayList<Message> mList;
+    private ArrayList<Message> tmpList;
 
     public InboxArrayAdapter(Context context, int resource, ArrayList<Message> list) {
         super(context, resource, list);
         mContext = context;
         mLayout = resource;
         mList = list;
+        tmpList = new ArrayList<>();
+        tmpList.addAll(list);
     }
 
     @Override
@@ -45,7 +51,8 @@ public class InboxArrayAdapter extends ArrayAdapter<Message> {
             convertView = inflater.inflate(mLayout, parent, false);
 
             viewHolder = new ViewHolder();
-
+            viewHolder.ivBackground = (CircularImageView)convertView.findViewById(R.id.ivBackground);
+            viewHolder.ivAvatar = (CircularImageView)convertView.findViewById(R.id.ivAvatar);
             viewHolder.tvName = (TextView)convertView.findViewById(R.id.tvName);
             viewHolder.tvFailed = (TextView)convertView.findViewById(R.id.tvFailed);
             viewHolder.tvUnreadNumber = (TextView)convertView.findViewById(R.id.tvUnreadNumber);
@@ -61,9 +68,17 @@ public class InboxArrayAdapter extends ArrayAdapter<Message> {
 
         Message message = mList.get(position);
 
+        Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), Defines.AVARTA_COLOR[position % Defines.AVARTA_COLOR.length]);
+        viewHolder.ivBackground.setImageBitmap(bitmap);
 
         Contact contact = message.getContact();
-
+        //set Icon late
+        if (contact.getPhotoUri() == null){
+            viewHolder.ivAvatar.setImageResource(R.drawable.fake_face);
+        }
+        else{
+            viewHolder.ivAvatar.setImageURI(Uri.parse(contact.getPhotoUri()));
+        }
 
         //change name later
         viewHolder.tvName.setText(contact.getName());
@@ -115,6 +130,25 @@ public class InboxArrayAdapter extends ArrayAdapter<Message> {
     }
 
     private class ViewHolder{
+        public CircularImageView ivBackground, ivAvatar;
         public TextView tvName, tvFailed, tvUnreadNumber, tvMessage, tvTime, tvLine;
+    }
+
+    public void filter(String query){
+        query = query.toLowerCase(Locale.getDefault());
+        mList.clear();
+        if(query.length() == 0){
+            mList.addAll(tmpList);
+        }
+        else {
+            for(Message message: tmpList){
+                if(message.getPhone().toLowerCase(Locale.getDefault()).contains(query) ||
+                        message.getBody().toLowerCase(Locale.getDefault()).contains(query) ||
+                        String.valueOf(message.getUnreadNumber()).toLowerCase(Locale.getDefault()).contains(query)){
+                    mList.add(message);
+                }
+            }
+        }
+        notifyDataSetChanged();
     }
 }

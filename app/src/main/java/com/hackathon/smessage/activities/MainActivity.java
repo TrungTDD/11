@@ -11,6 +11,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -31,6 +32,10 @@ public class MainActivity extends DefaultActivity {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mActionBarDrawerToggle;
     private NavigationView mNavigationView;
+
+    //MenuItem
+    private MenuItem mMenuItemInboxCommon;
+    private MenuItem mMenuItemInboxSecurity;
     //Inbox List
     private RelativeLayout mLayoutNoConversation;
     private ListView mLvInbox;
@@ -47,6 +52,9 @@ public class MainActivity extends DefaultActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if(mLvInbox != null){
+            updateInbox(AppConfigs.getInstance().isSecurity());
+        }
     }
 
     @Override
@@ -141,6 +149,10 @@ public class MainActivity extends DefaultActivity {
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         mLvInbox = (ListView)findViewById(R.id.lvInbox);
         mLayoutNoConversation = (RelativeLayout)findViewById(R.id.layout_no_conversation);
+
+        Menu menu = mNavigationView.getMenu();
+        mMenuItemInboxCommon = menu.findItem(R.id.menu_inbox_common);
+        mMenuItemInboxSecurity = menu.findItem(R.id.menu_inbox_security);
     }
 
     private void setWidgets(){
@@ -150,6 +162,10 @@ public class MainActivity extends DefaultActivity {
                                     R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         mActionBarDrawerToggle.syncState();
         mLvInbox.setAdapter(mInboxAdapter);
+
+        //default selected Inbox common
+        mMenuItemInboxCommon.setChecked(true);
+        updateInbox(AppConfigs.getInstance().isSecurity());
     }
 
     private void addWidgetsListener(){
@@ -165,9 +181,11 @@ public class MainActivity extends DefaultActivity {
                 switch (item.getItemId()){
                     case R.id.menu_inbox_common:
 
+                            updateInbox(false);
                         break;
                     case R.id.menu_inbox_security:
 
+                                    updateInbox(true);
                         break;
                     case R.id.menu_blocked_call_sms:
                         break;
@@ -179,5 +197,36 @@ public class MainActivity extends DefaultActivity {
                 return false;
             }
         });
+    }
+    private void updateInbox(boolean isSecurity){
+        AppConfigs.getInstance().setIsSecurity(isSecurity);
+        MessageOpearation.getInstance().loadInbox(isSecurity);
+        mInboxAdapter.notifyDataSetChanged();
+
+        //show no message or not
+        if(mInboxList.size() == 0){
+            mLayoutNoConversation.setVisibility(View.VISIBLE);
+            mLvInbox.setVisibility(View.GONE);
+        }
+        else{
+            mLayoutNoConversation.setVisibility(View.GONE);
+            mLvInbox.setVisibility(View.VISIBLE);
+        }
+
+        //update action bar title
+        int titleID = isSecurity ? R.string.inbox_security : R.string.inbox_common;
+        setTitle(titleID);
+
+        //set unread message
+        //common
+        int unreadSms = MessageOpearation.getInstance().getUnreadNumber(false);
+        mMenuItemInboxCommon.setTitle(getString(R.string.inbox_common) + (unreadSms == 0 ? "" : " (" + unreadSms + ")"));
+
+        //security
+        unreadSms = MessageOpearation.getInstance().getUnreadNumber(true);
+        mMenuItemInboxSecurity.setTitle(getString(R.string.inbox_security) + (unreadSms == 0 ? "" : " (" + unreadSms + ")"));
+
+        mMenuItemInboxSecurity.setChecked(isSecurity);
+        mMenuItemInboxCommon.setChecked(!mMenuItemInboxSecurity.isChecked());
     }
 }
