@@ -23,6 +23,12 @@
         android:title="@string/block_contact"/>
 
     <item
+        android:id="@+id/itemBlockSMS"
+        android:title="@string/block_sms"/>
+
+
+
+    <item
         android:id="@+id/itemMute"
         android:title="@string/mute"/>
 

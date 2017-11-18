@@ -2,8 +2,10 @@ package com.hackathon.smessage.activities;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -24,13 +26,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hackathon.smessage.R;
 import com.hackathon.smessage.adapters.ConversationArrayAdapter;
 import com.hackathon.smessage.configs.AppConfigs;
 import com.hackathon.smessage.configs.Defines;
+import com.hackathon.smessage.controllers.BlockedOperation;
 import com.hackathon.smessage.controllers.ContactOpearation;
 import com.hackathon.smessage.controllers.MessageOpearation;
+import com.hackathon.smessage.models.Blocked;
 import com.hackathon.smessage.models.Contact;
 import com.hackathon.smessage.models.Message;
 import com.hackathon.smessage.utils.PhoneNumberUtils;
@@ -117,6 +122,18 @@ public class ConversationActivity extends DefaultActivity {
             }
         }else if(id == R.id.callContact){
             dialCall(mCurrentMessage.getPhone());
+        }
+
+        if(id == R.id.itemBlockedContact){
+            showConfirmBlockCallConversations();
+        }
+
+        if(id == R.id.itemBlockSMS){
+            showConfirmBlockSMSConversations();
+        }
+
+        if(id == R.id.itemMute){
+            AppConfigs.getInstance().setMuteContact(mCurrentMessage.getPhone());
         }
         return super.onOptionsItemSelected(item);
     }
@@ -319,5 +336,44 @@ public class ConversationActivity extends DefaultActivity {
         }
         startActivity(intent);
     }
+
+    private void showConfirmBlockCallConversations(){
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.block)
+                .setMessage(R.string.add_block_Call_warning)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Blocked blocked = new Blocked(mCurrentMessage.getPhone(), false, true);
+                        BlockedOperation.getInstance().add(blocked);
+                        Toast.makeText(mActivity, "Block contact success !!!", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, null)
+                .create()
+                .show();
+    }
+
+    private void showConfirmBlockSMSConversations(){
+        new android.app.AlertDialog.Builder(this)
+                .setTitle(R.string.block)
+                .setMessage(R.string.add_block_SMS_warning)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Blocked blocked = new Blocked(mCurrentMessage.getPhone(), true, true);
+                        BlockedOperation.getInstance().add(blocked);
+                        MessageOpearation.getInstance().deleteConversation(mCurrentMessage);
+                        Toast.makeText(getApplicationContext(),"Block SMS succes!!!", Toast.LENGTH_SHORT).show();
+                        ConversationActivity.this.finish();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, null)
+                .create()
+                .show();
+    }
+
+
+
 
 }

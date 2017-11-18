@@ -425,7 +425,8 @@ public class MainActivity extends DefaultActivity {
                 .setNegativeButton(android.R.string.no, null)
                 .create()
                 .show();
-    }private void showConfirmBlockCallConversations(){
+    }
+    private void showConfirmBlockCallConversations(){
         new android.app.AlertDialog.Builder(this)
                 .setTitle(R.string.block)
                 .setMessage(R.string.add_block_Call_warning)

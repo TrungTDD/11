@@ -88,6 +88,7 @@
     <string name="view_contact">View Contact</string>
     <string name="add_contact">Add new Contact</string>
     <string name="block_contact">Block Contact</string>
+    <string name="block_sms">Block SMS</string>
     <string name="mute">Mute</string>
     <string name="pick_sound">Pick Sound</string>
 

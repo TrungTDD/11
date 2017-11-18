@@ -4,8 +4,8 @@ import android.content.DialogInterface;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,6 +24,9 @@ import com.hackathon.smessage.fragments.BlockedFragment;
 import com.hackathon.smessage.models.Blocked;
 import com.hackathon.smessage.utils.PhoneNumberUtils;
 
+import java.util.ArrayList;
+import java.util.Locale;
+
 public class BlockedActivity extends DefaultActivity {
 
     private BlockedPagerAdapter mAdapter;
@@ -34,6 +37,8 @@ public class BlockedActivity extends DefaultActivity {
     private EditText mEditText;
     private RadioButton mRadioBtSMS, mRadioBtCall, mRadioBtContact, mRadioBtcontent;
     private RadioGroup mRadioGroup;
+    private SearchView mSearchView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +54,7 @@ public class BlockedActivity extends DefaultActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_blocked_option, menu);
+        showSearch(menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -124,11 +130,14 @@ public class BlockedActivity extends DefaultActivity {
                 if(mEditText.getText().toString().equals("") == false
                         && mRadioBtcontent.isChecked()){
                     BlockedOperation.getInstance().add(new Blocked(mEditText.getText().toString(), true, mRadioBtContact.isChecked()));
-                    dialog.dismiss();break;
+                    mBlockedSmsFragment.setData(BlockedOperation.getInstance().getBlockedSMS());
+                    dialog.dismiss();
+                    break;
                 }
                 if(mEditText.getText().toString().equals("") == false
                         && mRadioBtContact.isChecked()&& PhoneNumberUtils.isValid(mEditText.getText().toString())){
                     BlockedOperation.getInstance().add(new Blocked(mEditText.getText().toString(), true, mRadioBtContact.isChecked()));
+                    mBlockedSmsFragment.setData(BlockedOperation.getInstance().getBlockedSMS());
                     dialog.dismiss();
                 }
                 else Toast.makeText(getApplicationContext(), R.string.error_text, Toast.LENGTH_SHORT).show();
@@ -140,6 +149,7 @@ public class BlockedActivity extends DefaultActivity {
                 }
                 else{
                     BlockedOperation.getInstance().add(new Blocked(mEditText.getText().toString(), false, true));
+                    mBlockedCallFragment.setData(BlockedOperation.getInstance().getBlockedCall());
                     dialog.dismiss();
                 }break;
         }
@@ -169,5 +179,38 @@ public class BlockedActivity extends DefaultActivity {
     }
 
     private void addWidgetsListener(){
+    }
+    private void showSearch(Menu menu){
+        mSearchView = (SearchView) menu.findItem(R.id.menu_block_search).getActionView();
+        mSearchView.setQueryHint(getString(R.string.search_hint));
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                String query = newText.toLowerCase(Locale.getDefault());
+                ArrayList<String> listSMS = new ArrayList<>();
+                ArrayList<String> listCall = new ArrayList<>();
+                ArrayList<Blocked> blockedSmsList = mBlockedSmsFragment.getList();
+                ArrayList<Blocked> blockCallList = mBlockedCallFragment.getList();
+                for(Blocked blocked : blockedSmsList){
+                    if(blocked.getContent().toLowerCase(Locale.getDefault()).contains(query)){
+                        listSMS.add(blocked.getContent());
+                    }
+                }
+
+                for(Blocked blocked : blockCallList){
+                    if(blocked.getContent().toLowerCase(Locale.getDefault()).contains(query)){
+                        listCall.add(blocked.getContent());
+                    }
+                }
+                mBlockedSmsFragment.getAdapter().setFilter(listSMS);
+                mBlockedCallFragment.getAdapter().setFilter(listCall);
+                return false;
+            }
+        });
     }
 }

@@ -4,7 +4,9 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.SearchView;
 import android.view.ActionMode;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,6 +24,7 @@ import com.hackathon.smessage.models.Blocked;
 import com.hackathon.smessage.models.Contact;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * Created by tai.nguyenduc on 11/18/2017.
@@ -77,6 +80,20 @@ public class BlockedFragment extends Fragment {
                 mAdapter.notifyDataSetChanged();
             }
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.activity_blocked_option,menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    public BlockedArrayAdapter getAdapter(){
+        return mAdapter;
+    }
+
+    public ArrayList<Blocked> getList(){
+        return mList;
     }
 
     private void init(){
@@ -183,4 +200,7 @@ public class BlockedFragment extends Fragment {
                 .create()
                 .show();
     }
+
+
+
 }

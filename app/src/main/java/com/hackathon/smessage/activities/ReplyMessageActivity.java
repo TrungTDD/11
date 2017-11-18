@@ -80,40 +80,13 @@ public class ReplyMessageActivity extends DefaultActivity {
         unregisterReceiver(mBroadcastSending);
     }
 
-    private void createDialog(){
-        LayoutInflater inflater = getLayoutInflater();
-        mLayout = inflater.inflate(R.layout.dialog_reply_message, null);
-
-        View headerLayout = inflater.inflate(R.layout.dialog_title_reply_message, null);
-        Button btnClose = (Button)headerLayout.findViewById(R.id.btnClose);
-        btnClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mActivity.finish();
-            }
-        });
-        mReplyPopup = new AlertDialog.Builder(this)
-                .setCancelable(false)
-                .setCustomTitle(headerLayout)
-                .setOnKeyListener(new DialogInterface.OnKeyListener() {
-                    @Override
-                    public boolean onKey(DialogInterface dialogInterface, int i, KeyEvent keyEvent) {
-                        if(i == KeyEvent.KEYCODE_BACK){
-                            finish();
-                            return true;
-                        }
-                        return false;
-                    }
-                })
-                .setView(mLayout).create();
-    }
 
     private void init(){
         mActivity = this;
         mCurrentIndex = 0;
         mQueueList = new ArrayList<>();
         Intent intent = getIntent();
-        Message message = (Message)intent.getSerializableExtra(Defines.PASS_MESSAGE_FROM_RECEIVER);
+        final Message message = (Message)intent.getSerializableExtra(Defines.PASS_MESSAGE_FROM_RECEIVER);
         addMessage(message);
 
         mBroadcastReceivedSMS = new BroadcastReceiver() {
@@ -335,8 +308,8 @@ public class ReplyMessageActivity extends DefaultActivity {
                         String currentPass = AppConfigs.getInstance().getPassword(isSecurity);
                         String pass = etPassword.getText().toString();
                         if(currentPass.equals(pass)) {
-                            mReplyPopup.show();
                             dialog.dismiss();
+                            mReplyPopup.show();
                         }
                         else{
                             Toast.makeText(getApplicationContext(), getString(R.string.wrong_password), Toast.LENGTH_SHORT).show();
@@ -346,5 +319,35 @@ public class ReplyMessageActivity extends DefaultActivity {
             }
         });
         dialog.show();
+    }
+
+
+    private void createDialog(){
+        LayoutInflater inflater = getLayoutInflater();
+        mLayout = inflater.inflate(R.layout.dialog_reply_message, null);
+
+        View headerLayout = inflater.inflate(R.layout.dialog_title_reply_message, null);
+        mReplyPopup = new AlertDialog.Builder(this)
+                .setCancelable(false)
+                .setCustomTitle(headerLayout)
+                .setOnKeyListener(new DialogInterface.OnKeyListener() {
+                    @Override
+                    public boolean onKey(DialogInterface dialogInterface, int i, KeyEvent keyEvent) {
+                        if(i == KeyEvent.KEYCODE_BACK){
+                            finish();
+                            return true;
+                        }
+                        return false;
+                    }
+                })
+                .setView(mLayout).create();
+        Button btnClose = (Button)headerLayout.findViewById(R.id.btnClose);
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mReplyPopup.dismiss();
+                mActivity.finish();
+            }
+        });
     }
 }

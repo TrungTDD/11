@@ -162,4 +162,18 @@ public class AppConfigs {
         return mSharedPreferences.getBoolean(mContext.getString(R.string.key_privacy_inbox_common_status_bar), false);
     }
 
+    public void setMuteContact(String phone){
+        String key = phone;
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putBoolean(phone,true);
+        editor.commit();
+    }
+
+    public boolean isMuteContact(String phone){
+        String key = phone;
+        return mSharedPreferences.getBoolean(phone,false);
+    }
+
+
+
 }

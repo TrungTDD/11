@@ -12,12 +12,15 @@
         android:orientation="vertical"
         android:layout_gravity="right"
         android:padding="@dimen/normal_space"
-        android:background="@color/activity_conversation_bg_me">
+        android:layout_marginLeft="100dp"
+        android:background="@drawable/conversation_bg_me">
 
         <TextView
             android:id="@+id/tvMessageMe"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="right"
+            android:padding="5dp"
             android:text="AAAaaaaaaaaaaaaaAAAAAAAA\nAAAA"/>
 
         <LinearLayout

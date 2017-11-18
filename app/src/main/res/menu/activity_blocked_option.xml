@@ -2,6 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/menu_block_search"
+        android:icon="@android:drawable/ic_menu_search"
+        android:title="@string/search_hint"
+        app:showAsAction="always"
+        app:actionViewClass="android.support.v7.widget.SearchView"/>
+    <item
         android:id="@+id/menu_new_blocked"
         android:icon="@drawable/ic_add"
         android:title="@string/blocked_call_sms"

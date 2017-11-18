@@ -16,6 +16,7 @@ import com.hackathon.smessage.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 import static android.view.View.GONE;
 
@@ -27,7 +28,7 @@ public class BlockedArrayAdapter extends ArrayAdapter<String> {
 
     private Context mContext;
     private int mLayout;
-    private ArrayList<String> mList;
+    private ArrayList<String> mList, tmpList;
     private HashMap<Integer, Boolean> mSelected = new HashMap<Integer, Boolean>();
 
     public BlockedArrayAdapter(Context context, int resource, ArrayList<String> list) {
@@ -36,6 +37,8 @@ public class BlockedArrayAdapter extends ArrayAdapter<String> {
         mLayout = resource;
         mList = list;
         mSelected = new HashMap<>();
+        tmpList = new ArrayList<>();
+        tmpList.addAll(list);
     }
 
     public int getCheckedCount(){
@@ -107,5 +110,30 @@ public class BlockedArrayAdapter extends ArrayAdapter<String> {
     private class ViewHolder{
         public ImageView ivSelected;
         public TextView tvContent;
+    }
+
+    public void filter(String query){
+        query = query.toLowerCase(Locale.getDefault());
+        mList.clear();
+
+        if(query.length() == 0){
+            mList.addAll(tmpList);
+        }
+        else {
+            for(String string : tmpList){
+                if(string.toLowerCase(Locale.getDefault()).equals(query)){
+                    mList.add(string);
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
+
+    public void setFilter(ArrayList<String> arrayList) {
+
+        //arrayList = new ArrayList<>(); // remove this line
+        mList.clear(); // add this so that it will clear old data
+        mList.addAll(arrayList);
+        notifyDataSetChanged();
     }
 }
