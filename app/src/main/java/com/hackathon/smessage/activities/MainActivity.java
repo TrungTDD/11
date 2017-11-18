@@ -9,11 +9,19 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.MenuItem;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.hackathon.smessage.BuildConfig;
 import com.hackathon.smessage.R;
+import com.hackathon.smessage.adapters.InboxArrayAdapter;
+import com.hackathon.smessage.configs.AppConfigs;
+import com.hackathon.smessage.controllers.MessageOpearation;
+import com.hackathon.smessage.models.Message;
 import com.hackathon.smessage.utils.PermissionUtils;
+
+import java.util.ArrayList;
 
 public class MainActivity extends DefaultActivity {
 
@@ -21,6 +29,11 @@ public class MainActivity extends DefaultActivity {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mActionBarDrawerToggle;
     private NavigationView mNavigationView;
+    //Inbox List
+    private RelativeLayout mLayoutNoConversation;
+    private ListView mLvInbox;
+    private InboxArrayAdapter mInboxAdapter;
+    private ArrayList<Message> mInboxList;
     //use load in thread
     private Handler mHandlerThread;
     @Override
@@ -58,6 +71,7 @@ public class MainActivity extends DefaultActivity {
 
     private void firstInit(){
         mActivity = this;
+        AppConfigs.getInstance().setIsSecurity(false);
         showSplash();
 
         mHandlerThread = new Handler(){
@@ -77,6 +91,14 @@ public class MainActivity extends DefaultActivity {
     //load
     private void init(){
         PermissionUtils.requireRegisterDefaultApp(this);
+        MessageOpearation.getInstance().loadInbox(AppConfigs.getInstance().isSecurity());
+        if(MessageOpearation.getInstance().getInbox().size() == 0 && MessageOpearation.getInstance().getInbox().size() == 0) {
+            MessageOpearation.getInstance().fakeData();
+        }
+
+
+        mInboxList = MessageOpearation.getInstance().getInbox();
+        mInboxAdapter = new InboxArrayAdapter(this, R.layout.item_message_inbox, mInboxList);
 
         android.os.Message msg = mHandlerThread.obtainMessage();
         mHandlerThread.sendMessage(msg);
@@ -93,6 +115,8 @@ public class MainActivity extends DefaultActivity {
         mToolbar = (Toolbar)findViewById(R.id.toolbar);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
+        mLvInbox = (ListView)findViewById(R.id.lvInbox);
+        mLayoutNoConversation = (RelativeLayout)findViewById(R.id.layout_no_conversation);
     }
 
     private void setWidgets(){
@@ -101,6 +125,7 @@ public class MainActivity extends DefaultActivity {
         mActionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar,
                                     R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         mActionBarDrawerToggle.syncState();
+        mLvInbox.setAdapter(mInboxAdapter);
     }
 
     private void addWidgetsListener(){
