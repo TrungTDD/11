@@ -1,6 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#fdbb2f</color>
+    <color name="colorPrimaryDark">#fdae2f</color>
+    <color name="colorAccent">#0051ff</color>
+
+    <color name="color_red">#FF0000</color>
+    <color name="color_white">#FFFFFF</color>
+    <color name="color_blue">#0000FF</color>
+    <color name="color_green">#00FF00</color>
+    <color name="slide_bar_background_color">#2d6184</color>
+
+    <color name="item_message_inbox_unread">#FFFFFF</color>
+    <color name="item_message_inbox_failed">#fa050d</color>
+    <color name="item_message_inbox_sending">#05f209</color>
+    <color name="item_message_inbox_name">#000000</color>
+    <color name="item_message_inbox_message">#9c9c9c</color>
+    <color name="item_message_inbox_time">@color/item_message_inbox_message</color>
+    <color name="item_message_inbox_line">#9c9c9c</color>
+    <color name="item_message_inbox_unread_number_bg">#fa050d</color>
+
+    <color name="activity_conversation_layout_enter_message_bg">#ffffff</color>
+    <color name="activity_conversation_bg_me">#a8ddfb</color>
+    <color name="activity_conversation_bg_you">#fee940</color>
+
+    <color name="pop_up_line_bg">#b1b1b1</color>
 </resources>

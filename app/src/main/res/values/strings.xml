@@ -1,3 +1,99 @@
 <resources>
     <string name="app_name">sMessage</string>
+    <string name="inputKeywords">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="permission">Permission</string>
+    <string name="setting">Settings</string>
+    <string name="exit">Exit</string>
+    <string name="confirm_go_setting_exit">You can not use sMessage because of the permissions (SMS, CONTACT, CALL) are denied.\nPlease go to setting to enable them.</string>
+    <string name="explain_info">sMessage app need permissions to operate:\n\t- SMS permission to send and receive message\n\t- CONTACT permission to read contacts in your device and display right person\n\t- CALL permssion to make a phone call from this app</string>
+
+    <string name="failed">Failed</string>
+    <string name="sending">Sending</string>
+    <string name="no_conversations">No messages"</string>
+    <string name="no_conversations_hint">Tap the button on the title bar\nto start a message</string>
+    <string name="enter_message_hint">Enter message here</string>
+    <string name="copyright">Copyright © 2017</string>
+    <string name="version">Version</string>
+    <string name="slogan">Awarded the faith</string>
+    <string name="hint_enter_contact">Enter contact</string>
+    <string name="title_choose_contact">Choose contact</string>
+    <string name="invalid_phone_warn">Invalid phone number</string>
+    <string name="inbox_common">Inbox - Common</string>
+    <string name="inbox_security">Inbox - Security</string>
+    <string name="communicate">Communicate</string>
+    <string name="blocked_call_sms">Blocked Call &amp; SMS</string>
+    <string name="share_facebook">Share via Facebook</string>
+    <string name="rating">Rating</string>
+    <string name="common_privacy">Privacy Inbox - Common</string>
+    <string name="security_privacy">Privacy Inbox - Security</string>
+    <string name="enable_password">Enable password</string>
+    <string name="change_password">Change password</string>
+    <string name="notification">Notification</string>
+    <string name="enter_password">Enter password</string>
+    <string name="password">Password</string>
+    <string name="wrong_password">Wrong password</string>
+    <string name="old_password">Old password</string>
+    <string name="new_password">New password</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="password_setting">Password setting</string>
+    <string name="register_password">Register password</string>
+    <string name="register_password_hint">(a-z, A-Z, 0-9)</string>
+    <string name="register_password_empty">Empty password</string>
+    <string name="register_password_wrong_confirm">Wrong confirm password</string>
+    <string name="successful">Successful!!</string>
+    <string name="status_bar">Status Bar</string>
+    <string name="status_bar_summary">Show a notification on status bar after SMS is incoming</string>
+    <string name="rings">Rings</string>
+    <string name="ring">Ring</string>
+    <string name="vibrate">Vibrate</string>
+    <string name="unread_message">Unread Messages</string>
+    <string name="unread_message_summary">Show number of unread messages on navigation menu</string>
+    <string name="reply_popup">Reply Pop-up</string>
+    <string name="reply_popup_summary">Show a pop-up to reply message immediately</string>
+    <string name="selected">selected</string>
+    <string name="delete">Delete</string>
+    <string name="all">All</string>
+    <string name="delete_blocked_warning">Delete blocked, you will receive calling(sms) next time. Do you want to delete?</string>
+
+    <string name="languages">Languages</string>
+    <string name="english">English</string>
+    <string name="vietnamese">Vietnamese</string>
+
+    <string name="blocked_call">Blocked Call</string>
+    <string name="blocked_sms">Blocked SMS</string>
+
+
+    <!--Keys -->
+    <string name="key_last_time_received_sms">key_last_time_received_sms</string>
+    <string name="key_common_privacy">common_privacy</string>
+    <string name="key_security_privacy">security_privacy</string>
+    <string name="key_ring_choice">security_privacy</string>
+
+    <string name="key_language">language_key</string>
+    <string name="key_english">english_key</string>
+    <string name="key_vietnamese">vietnamese_key</string>
+
+    <string name="key_password_inbox_common">key_password_inbox_common</string>
+    <string name="key_password_inbox_security">key_password_inbox_security</string>
+    <string name="key_privacy_inbox_common_enable_password">key_privacy_inbox_common_enable_password</string>
+    <string name="key_privacy_inbox_common_change_password">key_privacy_inbox_common_change_password</string>
+    <string name="key_privacy_inbox_common_notification">key_privacy_inbox_common_notification</string>
+    <string name="key_privacy_inbox_common_status_bar">key_privacy_inbox_common_status_bar</string>
+    <string name="key_privacy_inbox_common_ring">key_privacy_inbox_common_ring</string>
+    <string name="key_privacy_inbox_common_vibrate">key_privacy_inbox_common_vibrate</string>
+    <string name="key_privacy_inbox_common_unread_message">key_privacy_inbox_common_unread_message</string>
+    <string name="key_privacy_inbox_common_reply_popup">key_privacy_inbox_common_reply_popup</string>
+
+    <string name="key_privacy_inbox_security_enable_password">key_privacy_inbox_security_enable_password</string>
+    <string name="key_privacy_inbox_security_change_password">key_privacy_inbox_security_change_password</string>
+    <string name="key_privacy_inbox_security_notification">key_privacy_inbox_security_notification</string>
+    <string name="key_privacy_inbox_security_status_bar">key_privacy_inbox_security_status_bar</string>
+    <string name="key_privacy_inbox_security_ring">key_privacy_inbox_security_ring</string>
+    <string name="key_privacy_inbox_security_vibrate">key_privacy_inbox_security_vibrate</string>
+    <string name="key_privacy_inbox_security_unread_message">key_privacy_inbox_security_unread_message</string>
+    <string name="key_privacy_inbox_security_reply_popup">key_privacy_inbox_security_reply_popup</string>
 </resources>
