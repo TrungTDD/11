@@ -87,6 +87,7 @@
                 <action android:name="android.provider.Telephony.SMS_DELIVER" />
             </intent-filter>
         </receiver>
+
         <receiver
             android:name=".receivers.ReceiveMMS"
             android:permission="android.permission.BROADCAST_WAP_PUSH">
@@ -96,6 +97,13 @@
                 <data android:mimeType="application/vnd.wap.mms-message" />
             </intent-filter>
         </receiver>
+
+        <receiver android:name=".receivers.ReceiveCall">
+            <intent-filter>
+                <action android:name="android.intent.action.PHONE_STATE" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

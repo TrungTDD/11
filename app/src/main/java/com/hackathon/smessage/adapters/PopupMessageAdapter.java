@@ -1,6 +1,7 @@
 package com.hackathon.smessage.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -11,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.hackathon.smessage.R;
+import com.hackathon.smessage.activities.ConversationActivity;
+import com.hackathon.smessage.activities.MainActivity;
 import com.hackathon.smessage.configs.Defines;
 import com.hackathon.smessage.controllers.MessageOpearation;
 import com.hackathon.smessage.customViews.CircularImageView;
@@ -26,17 +29,25 @@ import java.util.ArrayList;
 
 public class PopupMessageAdapter extends PagerAdapter{
 
+    public static interface PagerClickedListener{
+        public void clicked();
+    }
+
     private Context mContext;
     private int mLayout; //layout
     private ArrayList<Message> mList;
 
     private ArrayList<String> mAvatarMap;
 
-    public PopupMessageAdapter(Context context, int resource, ArrayList<Message> list) {
+    private PagerClickedListener mPagerClickedListener;
+
+    public PopupMessageAdapter(Context context, int resource, ArrayList<Message> list, PagerClickedListener listener) {
         mContext = context;
         mLayout = resource;
         mList = list;
         mAvatarMap = new ArrayList();
+
+        mPagerClickedListener = listener;
     }
 
 
@@ -56,7 +67,7 @@ public class PopupMessageAdapter extends PagerAdapter{
     }
 
     @Override
-    public Object instantiateItem(ViewGroup container, int position) {
+    public Object instantiateItem(ViewGroup container, final int position) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
         View layout = inflater.inflate(mLayout, container, false);
 
@@ -67,6 +78,18 @@ public class PopupMessageAdapter extends PagerAdapter{
         TextView tvTime = (TextView)layout.findViewById(R.id.tvTime);
 
         Message message = mList.get(position);
+
+        layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, ConversationActivity.class);
+                intent.putExtra(Defines.PASS_MESSAGE_FROM_INBOX_TO_CONVERSATION, mList.get(position));
+                mContext.startActivity(intent);
+                if(mPagerClickedListener != null){
+                    mPagerClickedListener.clicked();
+                }
+            }
+        });
 
         if(!message.isRead()){
             Message savedSms = MessageOpearation.getInstance().getMessage(message.getId());

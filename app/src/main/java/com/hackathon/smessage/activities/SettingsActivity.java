@@ -8,7 +8,7 @@ import com.hackathon.smessage.fragments.NestedPreferenceFragment;
 import com.hackathon.smessage.fragments.SettingsFragment;
 
 
-public class SettingsActivity extends AppCompatActivity implements SettingsFragment.Callback {
+public class SettingsActivity extends DefaultActivity implements SettingsFragment.Callback {
 
     private static final String TAG_NESTED = "SUB_FRAGMENT";
 

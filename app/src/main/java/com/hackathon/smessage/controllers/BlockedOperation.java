@@ -3,8 +3,10 @@ package com.hackathon.smessage.controllers;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.widget.Toast;
 
 import com.hackathon.smessage.models.Blocked;
+import com.hackathon.smessage.models.Message;
 import com.hackathon.smessage.sqlitehelper.SqliteHelper;
 
 import java.util.ArrayList;
@@ -66,6 +68,35 @@ public class BlockedOperation {
         }
         mSqLiteDatabase.close();
         mSqliteHelper.close();
+    }
+
+    public boolean isBlockedMessage(Message message, boolean isBlockedPhone){
+
+        String filter = Blocked.FIELD_IS_SMS + " = 1 and "
+                + Blocked.FIELD_IS_CONTACT + " = " + (isBlockedPhone ? 1 : 0) + " and " + Blocked.FIELD_CONTENT + " like '%" + (isBlockedPhone ? message.getPhone() : message.getBody()) + "%'";
+
+        mSqLiteDatabase = mSqliteHelper.getReadableDatabase();
+        Cursor cursor = mSqLiteDatabase.query(SqliteHelper.TABLE_BLOCKED, BLOCKED_COLUMNS,
+                filter, null, null, null, null);
+
+        if(cursor != null && cursor.moveToNext()){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isBlockedCall(String phoneNumber){
+
+        String filter = Blocked.FIELD_IS_SMS + " = 0 and " + Blocked.FIELD_CONTENT + " like '%" + phoneNumber + "%'";
+
+        mSqLiteDatabase = mSqliteHelper.getReadableDatabase();
+        Cursor cursor = mSqLiteDatabase.query(SqliteHelper.TABLE_BLOCKED, BLOCKED_COLUMNS,
+                filter, null, null, null, null);
+
+        if(cursor != null && cursor.moveToNext()){
+            return true;
+        }
+        return false;
     }
 
     public ArrayList<Blocked> getBlockedCall(){

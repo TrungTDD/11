@@ -42,6 +42,7 @@ import com.hackathon.smessage.configs.Defines;
 import com.hackathon.smessage.controllers.BlockedOperation;
 import com.hackathon.smessage.controllers.ContactOpearation;
 import com.hackathon.smessage.controllers.MessageOpearation;
+import com.hackathon.smessage.models.Blocked;
 import com.hackathon.smessage.models.Contact;
 import com.hackathon.smessage.models.Message;
 import com.hackathon.smessage.utils.PermissionUtils;
@@ -343,6 +344,8 @@ public class MainActivity extends DefaultActivity {
             public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
                 mInboxAdapter.setItemChecked(position, checked);
                 setViewCheckedAll(mInboxAdapter.isAllChecked());
+                    mActionMode.setTitle(mInboxAdapter.getCheckedCount() + " " + R.string.selected);
+
             }
 
             @Override
@@ -377,6 +380,14 @@ public class MainActivity extends DefaultActivity {
                         //delete
                         showConfirmDeleteConversation();
                         break;
+                    case R.id.menu_block_sms:
+                        //block sms
+                        showConfirmBlockSMSConversations();
+                        break;
+                    case R.id.menu_block_call:
+                        //block call
+                        showConfirmBlockCallConversations();
+                        break;
                 }
                 return false;
             }
@@ -386,6 +397,60 @@ public class MainActivity extends DefaultActivity {
                 mInboxAdapter.setAllChecked(false);
             }
         });
+    }
+    private void showConfirmBlockSMSConversations(){
+        new android.app.AlertDialog.Builder(this)
+                .setTitle(R.string.block)
+                .setMessage(R.string.add_block_SMS_warning)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        int count = 0;
+                        for(int  index = mInboxList.size() - 1; index >= 0; index--){
+                            if(mInboxAdapter.isItemChecked(index)){
+                                Message message = mInboxList.get(index);
+                                //MessageOpearation.getInstance().deleteConversation(mInboxList.get(index));
+                                Blocked blocked = new Blocked(message.getPhone(), true, true);
+                                BlockedOperation.getInstance().add(blocked);
+                                MessageOpearation.getInstance().deleteConversation(mInboxList.get(index));
+                                count++;
+                            }
+                        }
+                        Toast.makeText(getApplicationContext(),"Blocked: " + count, Toast.LENGTH_SHORT).show();
+                        mInboxAdapter.clear();
+                        mInboxAdapter.notifyDataSetChanged();
+                        mActionMode.finish();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, null)
+                .create()
+                .show();
+    }private void showConfirmBlockCallConversations(){
+        new android.app.AlertDialog.Builder(this)
+                .setTitle(R.string.block)
+                .setMessage(R.string.add_block_Call_warning)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        int count = 0;
+                        for(int index = mInboxList.size() - 1; index >= 0; index--){
+                            if(mInboxAdapter.isItemChecked(index)){
+                                Message message = mInboxList.get(index);
+                                //MessageOpearation.getInstance().deleteConversation(mInboxList.get(index));
+                                Blocked blocked = new Blocked(message.getPhone(), false, true);
+                                BlockedOperation.getInstance().add(blocked);
+                                count++;
+                            }
+                        }
+                        Toast.makeText(getApplicationContext(),"Blocked: " + count, Toast.LENGTH_SHORT).show();
+                        mInboxAdapter.clear();
+                        mInboxAdapter.notifyDataSetChanged();
+                        mActionMode.finish();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, null)
+                .create()
+                .show();
     }
     private void showConfirmDeleteConversation(){
         new android.app.AlertDialog.Builder(this)

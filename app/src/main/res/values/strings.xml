@@ -59,6 +59,9 @@
     <string name="all">All</string>
     <string name="delete_conversation_warning">Delete conversation, All messages from this conversation will be deleted. Do you want to delete?</string>
     <string name="delete_blocked_warning">Delete blocked, you will receive calling(sms) next time. Do you want to delete?</string>
+    <string name="add_block_SMS_warning">Block, you will no longer receive SMS next time and the conversation(s) will be deleted immediately. Do you want to block?</string>
+    <string name="add_block_Call_warning">Block, you will no longer receive Call next time . Do you want to block?</string>
+    <string name="block">Block</string>
 
     <string name="languages">Languages</string>
     <string name="english">English</string>
@@ -68,6 +71,14 @@
     <string name="blocked_sms">Blocked SMS</string>
     <string name="search_hint">Search</string>
 
+    <string name="blocked_content">Blocked Content</string>
+    <string name="blocked_contact">Blocked Contact</string>
+    <string name="blocked">Blocked</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="error_text">Error Text</string>
+    <string name="phon_number">Phon Number</string>
+    <string name="text">Text</string>
 
     <string name="block_call">Block Call(s)</string>
     <string name="block_message">Block SMS(s)</string>

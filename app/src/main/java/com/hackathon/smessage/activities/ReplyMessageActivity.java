@@ -229,10 +229,17 @@ public class ReplyMessageActivity extends DefaultActivity {
                 mBtnSend.setVisibility(View.GONE);
             }
         });
+
+
     }
 
     private void setViewPaper(){
-        mAdapter = new PopupMessageAdapter(this, R.layout.item_popup_message, mQueueList);
+        mAdapter = new PopupMessageAdapter(this, R.layout.item_popup_message, mQueueList, new PopupMessageAdapter.PagerClickedListener() {
+            @Override
+            public void clicked() {
+                finish();
+            }
+        });
         vpConversation.setAdapter(mAdapter);
         vpConversation.setCurrentItem(mCurrentIndex);
     }

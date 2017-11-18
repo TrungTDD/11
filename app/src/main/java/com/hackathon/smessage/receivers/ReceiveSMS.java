@@ -10,12 +10,14 @@ import android.telephony.SmsMessage;
 import com.hackathon.smessage.activities.ReplyMessageActivity;
 import com.hackathon.smessage.configs.AppConfigs;
 import com.hackathon.smessage.configs.Defines;
+import com.hackathon.smessage.controllers.BlockedOperation;
 import com.hackathon.smessage.controllers.MessageOpearation;
 import com.hackathon.smessage.models.Message;
 import com.hackathon.smessage.sqlitehelper.SqliteHelper;
 import com.hackathon.smessage.utils.PhoneNumberUtils;
 import com.hackathon.smessage.utils.Security;
 import com.hackathon.smessage.utils.TimeUtils;
+import com.hackathon.smessage.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -41,19 +43,24 @@ public class ReceiveSMS extends BroadcastReceiver {
         long lastTimeReceived = AppConfigs.getInstance().getLastTimeReceivedSms();
         long currentTime = Calendar.getInstance().getTimeInMillis();
         if(list.size() > 0 && (currentTime - lastTimeReceived >= Defines.DURATION_RECEIVED_SMS)) {
+            if(!BlockedOperation.getInstance().isBlockedMessage(list.get(0), true)
+                    && !BlockedOperation.getInstance().isBlockedMessage(list.get(0), false)) {
+                for (Message message : list) {
+                    message.setIsSecurity(Security.getInstance().isSecurity(message.getBody()));
+                    MessageOpearation.getInstance().add(message);
+                    message.decrypt(); //decrypt to show
+                }
 
-            for (Message message : list) {
-                message.setIsSecurity(Security.getInstance().isSecurity(message.getBody()));
-                MessageOpearation.getInstance().add(message);
-                message.decrypt(); //decrypt to show
+                currentTime = Calendar.getInstance().getTimeInMillis();
+                AppConfigs.getInstance().setLastTimeReceivedSms(currentTime);
+                if (AppConfigs.getInstance().isAppRunning() || AppConfigs.getInstance().isPopupShowing()) {
+                    sendBroadcastToApp(context, list.get(0));
+                } else {
+                    showReply(context, list.get(0));
+                }
             }
-
-            currentTime = Calendar.getInstance().getTimeInMillis();
-            AppConfigs.getInstance().setLastTimeReceivedSms(currentTime);
-            if (AppConfigs.getInstance().isAppRunning() || AppConfigs.getInstance().isPopupShowing()) {
-                sendBroadcastToApp(context, list.get(0));
-            } else {
-                showReply(context, list.get(0));
+            else{
+                Utils.LOG("AAAAAAAAAAAAAAAAa");
             }
         }
         //ignore sms to old inbox
