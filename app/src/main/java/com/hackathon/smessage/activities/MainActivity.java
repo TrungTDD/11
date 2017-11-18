@@ -1,17 +1,21 @@
 package com.hackathon.smessage.activities;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -19,12 +23,17 @@ import android.widget.TextView;
 import com.hackathon.smessage.BuildConfig;
 import com.hackathon.smessage.R;
 import com.hackathon.smessage.adapters.InboxArrayAdapter;
+import com.hackathon.smessage.adapters.SearchAllMessageAdapter;
 import com.hackathon.smessage.configs.AppConfigs;
+import com.hackathon.smessage.configs.Defines;
+import com.hackathon.smessage.controllers.ContactOpearation;
 import com.hackathon.smessage.controllers.MessageOpearation;
 import com.hackathon.smessage.models.Message;
 import com.hackathon.smessage.utils.PermissionUtils;
 
 import java.util.ArrayList;
+import java.util.Locale;
+import java.util.PropertyPermission;
 
 public class MainActivity extends DefaultActivity {
 
@@ -43,6 +52,12 @@ public class MainActivity extends DefaultActivity {
     private ArrayList<Message> mInboxList;
     //use load in thread
     private Handler mHandlerThread;
+
+    // SearchView
+    private SearchView mSearchView;
+    private SearchAllMessageAdapter mSearchAllMessageAdapter;
+    private ArrayList<Message> mListAllMessage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +76,7 @@ public class MainActivity extends DefaultActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.activity_main_option, menu);
+        showSearch(menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -134,6 +150,9 @@ public class MainActivity extends DefaultActivity {
 
         android.os.Message msg = mHandlerThread.obtainMessage();
         mHandlerThread.sendMessage(msg);
+
+        mListAllMessage = MessageOpearation.getInstance().getAllMessages(false);
+        mSearchAllMessageAdapter = new SearchAllMessageAdapter(MainActivity.this, mListAllMessage);
     }
 
     private void start(){
@@ -153,6 +172,8 @@ public class MainActivity extends DefaultActivity {
         Menu menu = mNavigationView.getMenu();
         mMenuItemInboxCommon = menu.findItem(R.id.menu_inbox_common);
         mMenuItemInboxSecurity = menu.findItem(R.id.menu_inbox_security);
+
+
     }
 
     private void setWidgets(){
@@ -180,12 +201,10 @@ public class MainActivity extends DefaultActivity {
 
                 switch (item.getItemId()){
                     case R.id.menu_inbox_common:
-
-                            updateInbox(false);
+                        updateInbox(false);
                         break;
                     case R.id.menu_inbox_security:
-
-                                    updateInbox(true);
+                        updateInbox(true);
                         break;
                     case R.id.menu_blocked_call_sms:
                         break;
@@ -197,7 +216,22 @@ public class MainActivity extends DefaultActivity {
                 return false;
             }
         });
+
+        mLvInbox.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Message message = mInboxList.get(i);
+                gotoConversation(message);
+            }
+        });
     }
+
+    private void gotoConversation(Message message){
+        Intent intent = new Intent(MainActivity.this, ConversationActivity.class);
+        intent.putExtra(Defines.PASS_MESSAGE_FROM_INBOX_TO_CONVERSATION, message);
+        startActivity(intent);
+    }
+
     private void updateInbox(boolean isSecurity){
         AppConfigs.getInstance().setIsSecurity(isSecurity);
         MessageOpearation.getInstance().loadInbox(isSecurity);
@@ -228,5 +262,30 @@ public class MainActivity extends DefaultActivity {
 
         mMenuItemInboxSecurity.setChecked(isSecurity);
         mMenuItemInboxCommon.setChecked(!mMenuItemInboxSecurity.isChecked());
+    }
+
+    private void showSearch(Menu menu){
+        mSearchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+        mSearchView.setQueryHint("Search");
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                String query = newText.toLowerCase(Locale.getDefault());
+                if(query.length() == 0){
+                    mLvInbox.setAdapter(mInboxAdapter);
+                }
+                else {
+                    mLvInbox.setAdapter(mSearchAllMessageAdapter);
+                    mSearchAllMessageAdapter.filter(query);
+                }
+
+                return false;
+            }
+        });
     }
 }

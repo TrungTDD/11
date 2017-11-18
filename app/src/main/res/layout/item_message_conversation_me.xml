@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layoutMe"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/normal_space">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="right"
+        android:padding="@dimen/normal_space"
+        android:background="@color/activity_conversation_bg_me">
+
+        <TextView
+            android:id="@+id/tvMessageMe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="AAAaaaaaaaaaaaaaAAAAAAAA\nAAAA"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right">
+            <Button
+                android:id="@+id/btnRetryMe"
+                android:layout_width="@dimen/item_conversation_icon_retry_size"
+                android:layout_height="@dimen/item_conversation_icon_retry_size"
+                android:layout_gravity="center_vertical"
+                android:focusable="false"
+                android:background="@drawable/ic_retry"
+                android:layout_marginRight="@dimen/normal_space"/>
+
+            <TextView
+                android:id="@+id/tvFailedMe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textSize="@dimen/normal_text_size"
+                android:textColor="@color/item_message_inbox_failed"
+                android:layout_marginRight="@dimen/normal_space"
+                android:text="Failed"/>
+
+            <TextView
+                android:id="@+id/tvTimeMe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textSize="@dimen/normal_text_size"
+                android:textColor="@color/item_message_inbox_time"
+                android:layout_marginRight="@dimen/normal_space"
+                android:text="12:00:12, 12/12/2017"/>
+        </LinearLayout>
+    </LinearLayout>
+
+
+</LinearLayout>

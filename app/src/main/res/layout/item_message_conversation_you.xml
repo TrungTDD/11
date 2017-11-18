@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layoutYou"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/normal_space">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="left"
+        android:padding="@dimen/normal_space"
+        android:background="@color/activity_conversation_bg_you">
+        <TextView
+            android:id="@+id/tvMessageYou"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="AAAAAAAAAAAA\nAAAA"/>
+
+        <TextView
+            android:id="@+id/tvTimeYou"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:textSize="@dimen/normal_text_size"
+            android:textColor="@color/item_message_inbox_time"
+            android:layout_marginRight="@dimen/normal_space"
+            android:text="12:00:12, 12/12/2017"/>
+    </LinearLayout>
+</LinearLayout>
