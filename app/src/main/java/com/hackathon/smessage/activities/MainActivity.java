@@ -344,7 +344,7 @@ public class MainActivity extends DefaultActivity {
             public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
                 mInboxAdapter.setItemChecked(position, checked);
                 setViewCheckedAll(mInboxAdapter.isAllChecked());
-                    mActionMode.setTitle(mInboxAdapter.getCheckedCount() + " " + R.string.selected);
+                    mActionMode.setTitle(mInboxAdapter.getCheckedCount() + " " + getString(R.string.selected));
 
             }
 

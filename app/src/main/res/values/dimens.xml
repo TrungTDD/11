@@ -36,6 +36,9 @@
     <dimen name="main_activity_no_conversation_padding_left_right">10dp</dimen>
     <dimen name="main_activity_no_conversation_send_icon_size">30dp</dimen>
 
+    <dimen name="conversation_activity_enter_message_min_height">55dp</dimen>
+    <dimen name="conversation_activity_enter_password_height">25dp</dimen>
+
     <dimen name="item_conversation_bg_radius">10dp</dimen>
     <dimen name="item_conversation_icon_retry_size">20dp</dimen>
 

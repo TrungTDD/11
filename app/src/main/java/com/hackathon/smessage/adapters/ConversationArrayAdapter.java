@@ -29,6 +29,7 @@ public class ConversationArrayAdapter extends ArrayAdapter<Message> {
     private ArrayList<Message> mList;
     private ArrayList<Message> tmpList;
 
+
     public ConversationArrayAdapter(Context context, int resource, ArrayList<Message> list) {
         super(context, resource, list);
         mContext = context;

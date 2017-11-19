@@ -1,12 +1,20 @@
 package com.hackathon.smessage.receivers;
 
+import android.app.ActionBar;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.telephony.SmsMessage;
 
+import com.hackathon.smessage.activities.ConversationActivity;
 import com.hackathon.smessage.activities.ReplyMessageActivity;
 import com.hackathon.smessage.configs.AppConfigs;
 import com.hackathon.smessage.configs.Defines;
@@ -53,11 +61,46 @@ public class ReceiveSMS extends BroadcastReceiver {
 
                 currentTime = Calendar.getInstance().getTimeInMillis();
                 AppConfigs.getInstance().setLastTimeReceivedSms(currentTime);
+
+                boolean isSecurity  = list.get(0).isSecurity();
                 if (AppConfigs.getInstance().isAppRunning() || AppConfigs.getInstance().isPopupShowing()) {
                     sendBroadcastToApp(context, list.get(0));
                 } else {
-                    showReply(context, list.get(0));
+                        if(AppConfigs.getInstance().isReplyPopup(isSecurity))
+                            showReply(context, list.get(0));
+
                 }
+
+
+
+                if(AppConfigs.getInstance().isNotification(isSecurity)){
+
+                    if(AppConfigs.getInstance().isRing(isSecurity)){
+                        //ring
+                        if(!AppConfigs.getInstance().isMuteContact(list.get(0).getPhone())){
+                            Utils.playRingtone(context);
+                        }
+                    }else{
+                        if(!AppConfigs.getInstance().isMuteContact(list.get(0).getPhone())){
+                            Utils.playRingtone(context);
+                        }
+                    }
+
+                    if(AppConfigs.getInstance().isVibrate(isSecurity)){
+                        Utils.setVibrate(context, 500);
+                    }
+
+                    if(AppConfigs.getInstance().isStatusBar(isSecurity)){
+                        //show Notifu
+                        if(AppConfigs.getInstance().isEnablePassword(isSecurity)){
+                            list.get(0).setUnreadNumber(MessageOpearation.getInstance().getUnreadNumber(list.get(0)));
+                            showNotification(context,list.get(0));
+                        }
+                    }
+
+
+                }
+
             }
             else{
                 Utils.LOG("AAAAAAAAAAAAAAAAa");
@@ -65,7 +108,6 @@ public class ReceiveSMS extends BroadcastReceiver {
         }
         //ignore sms to old inbox
         abortBroadcast();
-
     }
 
     private ArrayList<Message> getMessages(Intent intent){
@@ -107,4 +149,45 @@ public class ReceiveSMS extends BroadcastReceiver {
         context.sendBroadcast(intent);
     }
 
-}
+
+        private void showNotification(Context context,Message message){
+
+
+            NotificationCompat.Builder mBuilder =
+                    new NotificationCompat.Builder(context)
+                            .setSmallIcon(android.R.drawable.stat_notify_chat)
+                            .setContentTitle(message.getPhone()+"("+message.getUnreadNumber()+" tin nhắn)")
+                            .setAutoCancel(true)
+                            .setContentText(message.getBody())
+                            .setPriority(android.support.v7.app.NotificationCompat.PRIORITY_MAX)
+                            .setVibrate(new long[]{0});
+
+
+// Creates an explicit intent for an Activity in your app
+            Intent resultIntent = new Intent(context, ConversationActivity.class);
+            resultIntent.putExtra(Defines.PASS_MESSAGE_FROM_INBOX_TO_CONVERSATION, message);
+
+// The stack builder object will contain an artificial back stack for the
+// started Activity.
+// This ensures that navigating backward from the Activity leads out of
+// your application to the Home screen.
+            TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+// Adds the back stack for the Intent (but not the Intent itself)
+            stackBuilder.addParentStack(ConversationActivity.class);
+// Adds the Intent that starts the Activity to the top of the stack
+            stackBuilder.addNextIntent(resultIntent);
+            PendingIntent resultPendingIntent =
+                    stackBuilder.getPendingIntent(
+                            0,
+                            PendingIntent.FLAG_UPDATE_CURRENT
+                    );
+
+
+            mBuilder.setContentIntent(resultPendingIntent);
+            NotificationManager mNotificationManager =
+                    (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+// mId allows you to update the notification later on.
+            mNotificationManager.notify(1, mBuilder.build());
+        }
+    }
+

@@ -34,6 +34,9 @@
     <string name="change_password">Change password</string>
     <string name="notification">Notification</string>
     <string name="enter_password">Enter password</string>
+    <string name="enter_encrypt_password">Enter encrypt password</string>
+    <string name="enter_decrypt_password">Enter decrypt password</string>
+    <string name="enter_password_max_length">Enter encrypt password (max length: 20)</string>
     <string name="password">Password</string>
     <string name="wrong_password">Wrong password</string>
     <string name="old_password">Old password</string>
@@ -56,12 +59,17 @@
     <string name="reply_popup_summary">Show a pop-up to reply message immediately</string>
     <string name="selected">selected</string>
     <string name="delete">Delete</string>
+    <string name="forward">Forward</string>
+    <string name="deleted">Deleted</string>
     <string name="all">All</string>
     <string name="delete_conversation_warning">Delete conversation, All messages from this conversation will be deleted. Do you want to delete?</string>
     <string name="delete_blocked_warning">Delete blocked, you will receive calling(sms) next time. Do you want to delete?</string>
     <string name="add_block_SMS_warning">Block, you will no longer receive SMS next time and the conversation(s) will be deleted immediately. Do you want to block?</string>
     <string name="add_block_Call_warning">Block, you will no longer receive Call next time . Do you want to block?</string>
     <string name="block">Block</string>
+
+    <string name="copy">Copy</string>
+    <string name="move_to_inbox_security">Move to inbox-security</string>
 
     <string name="languages">Languages</string>
     <string name="english">English</string>
@@ -90,6 +98,7 @@
     <string name="block_contact">Block Contact</string>
     <string name="block_sms">Block SMS</string>
     <string name="mute">Mute</string>
+    <string name="unmute">Unmute</string>
     <string name="pick_sound">Pick Sound</string>
 
 

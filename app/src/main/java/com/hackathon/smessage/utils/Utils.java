@@ -1,6 +1,13 @@
 package com.hackathon.smessage.utils;
 
 
+import android.app.Activity;
+import android.content.Context;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.os.Vibrator;
+import android.renderscript.RenderScript;
 import android.util.Log;
 import com.hackathon.smessage.BuildConfig;
 
@@ -67,4 +74,23 @@ public class Utils {
         }
         return true;
     }
+
+    public static void setVibrate(Activity activity, int milisecond){
+        Vibrator vibrator = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
+        vibrator.vibrate(milisecond);
+    }
+
+    @SuppressWarnings("deprecation")
+    public static void setVibrate(Context context, int milisecond){
+        Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        vibrator.vibrate(milisecond);
+    }
+
+    public static void playRingtone(Context context){
+        Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        Ringtone r = RingtoneManager.getRingtone(context, notification);
+        r.play();
+    }
+
+
 }

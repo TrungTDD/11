@@ -9,7 +9,34 @@
         android:layout_height="match_parent"
         android:divider="@null"
         android:dividerHeight="0dp"
-        android:layout_above="@+id/layoutControlSend"></ListView>
+        android:layout_above="@+id/layoutPassword"/>
+
+    <LinearLayout
+        android:id="@+id/layoutPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/main_activity_no_conversation_padding_top_bottom"
+        android:paddingBottom="@dimen/main_activity_no_conversation_padding_top_bottom"
+        android:paddingLeft="@dimen/main_activity_no_conversation_padding_left_right"
+        android:paddingRight="@dimen/main_activity_no_conversation_padding_left_right"
+        android:background="@color/activity_conversation_layout_enter_pass_bg"
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true"
+        android:layout_above="@+id/layoutControlSend"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <EditText
+            android:id="@+id/etPassword"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/conversation_activity_enter_password_height"
+            android:background="@drawable/send_message_bg"
+            android:hint="@string/enter_password_max_length"
+            android:digits="@string/inputKeywords"
+            android:maxLength="@integer/password_max_length_encrypt"
+            android:textSize="@dimen/normal_text_size"/>
+    </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/layoutControlSend"
@@ -28,7 +55,7 @@
             android:id="@+id/etEnterMessage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="55dp"
+            android:minHeight="@dimen/conversation_activity_enter_message_min_height"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/normal_space"
             android:layout_toLeftOf="@+id/layoutRight"

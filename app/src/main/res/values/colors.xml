@@ -2,6 +2,7 @@
 <resources>
     <color name="colorPrimary">#fdbb2f</color>
     <color name="colorPrimaryDark">#fdae2f</color>
+    <color name="colorPrimaryDarkest">#ff4f18</color>
     <color name="colorAccent">#0051ff</color>
 
     <color name="color_red">#FF0000</color>
@@ -20,6 +21,7 @@
     <color name="item_message_inbox_unread_number_bg">#fa050d</color>
 
     <color name="activity_conversation_layout_enter_message_bg">#ffffff</color>
+    <color name="activity_conversation_layout_enter_pass_bg">#e4e4e4</color>
     <color name="activity_conversation_bg_me">#a8ddfb</color>
     <color name="activity_conversation_bg_you">#fee940</color>
 

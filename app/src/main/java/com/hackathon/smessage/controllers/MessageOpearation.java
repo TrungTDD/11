@@ -360,7 +360,7 @@ public class MessageOpearation {
         return contentValues;
     }
 
-    private int getUnreadNumber(Message message){
+    public int getUnreadNumber(Message message){
         int unread = 0;
         mSqLiteDatabase = mSqliteHelper.getReadableDatabase();
         Cursor cursor = mSqLiteDatabase.query(SqliteHelper.TABLE_MESSAGE, MESSAGE_COLUMNS,

@@ -162,10 +162,10 @@ public class AppConfigs {
         return mSharedPreferences.getBoolean(mContext.getString(R.string.key_privacy_inbox_common_status_bar), false);
     }
 
-    public void setMuteContact(String phone){
+    public void setMuteContact(String phone, boolean isMute){
         String key = phone;
         SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.putBoolean(phone,true);
+        editor.putBoolean(phone,isMute);
         editor.commit();
     }
 
@@ -174,6 +174,18 @@ public class AppConfigs {
         return mSharedPreferences.getBoolean(phone,false);
     }
 
+    public boolean isNotification(boolean isSecurity){
+        if(isSecurity){
+            return mSharedPreferences.getBoolean(mContext.getString(R.string.key_privacy_inbox_security_notification), false);
+        }
+        return mSharedPreferences.getBoolean(mContext.getString(R.string.key_privacy_inbox_common_notification), false);
+    }
 
+    public boolean isReplyPopup(boolean isSecurity){
+        if(isSecurity){
+            return mSharedPreferences.getBoolean(mContext.getString(R.string.key_privacy_inbox_security_reply_popup), false);
+        }
+        return mSharedPreferences.getBoolean(mContext.getString(R.string.key_privacy_inbox_common_reply_popup), false);
+    }
 
 }

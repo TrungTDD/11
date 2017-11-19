@@ -7,6 +7,7 @@ import android.telephony.SmsManager;
 
 import com.hackathon.smessage.configs.Defines;
 import com.hackathon.smessage.utils.Security;
+import com.hackathon.smessage.utils.Utils;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -197,15 +198,23 @@ public class Message implements Serializable {
     }
 
     public void encrypt(){
+        encrypt("");
+    }
+
+    public void encrypt(String password){
         if(mIsSecurity){
             mBody = SECURITY_CODE + mBody;
-            mBody = Security.getInstance().encrypt(mBody);
+            mBody = Security.getInstance().encrypt(mBody, password);
         }
     }
 
     public void decrypt(){
+        decrypt("");
+    }
+
+    public void decrypt(String password){
         if(mIsSecurity){
-            mBody = Security.getInstance().decrypt(mBody);
+            mBody = Security.getInstance().decrypt(mBody, password);
             mBody = mBody.substring(1);
         }
     }
@@ -216,6 +225,7 @@ public class Message implements Serializable {
         msgSent.putExtra(Defines.PASS_MESSAGE_FROM_CONVERSATION_TO_SEND, this);
         PendingIntent pendingMsgSent = PendingIntent.getBroadcast(activity, 0, msgSent, 0);
         smsManager.sendTextMessage(mPhone, null, mBody, pendingMsgSent, null);
+        Utils.LOG(mBody);
     }
 
     @Override
