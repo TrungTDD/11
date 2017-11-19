@@ -86,8 +86,8 @@ public class ReplyMessageActivity extends DefaultActivity {
         mCurrentIndex = 0;
         mQueueList = new ArrayList<>();
         Intent intent = getIntent();
-        final Message message = (Message)intent.getSerializableExtra(Defines.PASS_MESSAGE_FROM_RECEIVER);
-        addMessage(message);
+//        final Message message = (Message)intent.getSerializableExtra(Defines.PASS_MESSAGE_FROM_RECEIVER);
+//        addMessage(message);
 
         mBroadcastReceivedSMS = new BroadcastReceiver() {
             @Override

@@ -47,6 +47,7 @@ import com.hackathon.smessage.models.Contact;
 import com.hackathon.smessage.models.Message;
 import com.hackathon.smessage.utils.PermissionUtils;
 import com.hackathon.smessage.utils.PhoneNumberUtils;
+import com.hackathon.smessage.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -89,6 +90,9 @@ public class MainActivity extends DefaultActivity {
         void negativeAction();
     }
 
+    static {
+        System.loadLibrary("android_jni");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

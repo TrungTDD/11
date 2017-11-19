@@ -187,5 +187,10 @@ public class AppConfigs {
         }
         return mSharedPreferences.getBoolean(mContext.getString(R.string.key_privacy_inbox_common_reply_popup), false);
     }
-
+    public boolean isUnreadMessage(boolean isSecurity){
+        if(isSecurity){
+            return mSharedPreferences.getBoolean(mContext.getString(R.string.key_privacy_inbox_security_unread_message), false);
+        }
+        return mSharedPreferences.getBoolean(mContext.getString(R.string.key_privacy_inbox_common_unread_message), false);
+    }
 }

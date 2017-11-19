@@ -1,5 +1,7 @@
 package com.hackathon.smessage.utils;
 
+import android.os.Environment;
+
 import com.hackathon.smessage.models.Message;
 
 /**
@@ -7,13 +9,12 @@ import com.hackathon.smessage.models.Message;
  */
 
 public class Security {
-
-    private int MATRIX_COLUMN 			= 10;
-    private int MATRIX_MIN_ROW 			= 7; //max sms for UCS2 = 7 x 10 = 70 chatacter
-    private char MATRIX_DEFAULT_VALUE	= ' '; //space
+    private static int MATRIX_COLUMN 			= 10;
+    private static int MATRIX_MIN_ROW 			= 7; //max sms for UCS2 = 7 x 10 = 70 chatacter
+    private static char MATRIX_DEFAULT_VALUE	= ' '; //space
 
     //character will encrypt
-    private String CHARACTER            = " !\"#$%&')*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+    private static String CHARACTER            = " !\"#$%&')*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~";
 
     private static String VIGENERE_DEFAULT_KEY  = "xNYUWmL8mDzM9poJrL810IArfvgoehvB2f6ZSdyHAVNyLCSktgpJnELszUGKATGZC71ySY";
 
@@ -30,21 +31,9 @@ public class Security {
         return sInstance;
     }
 
-    public String encrypt(String message){
-        return encrypt(message, "");
-    }
+    public native String encrypt(String message, String password);
 
-    public String encrypt(String message, String password){
-        String encryptMatrix = matrixEncrypt(message);
-        String encryptVigenere = vigenereEncrypt(encryptMatrix, password);
-        return encryptVigenere;
-    }
-
-    public String decrypt(String message, String password){
-        String decryptVigenere = vigenereDecrypt(message, password);
-        String decryptMatrix = matrixDecrypt(decryptVigenere);
-        return decryptMatrix;
-    }
+    public native String decrypt(String message, String password);
 
     public boolean isSecurity(String message){
         String tmpDecrypt = decrypt(message, "");
@@ -54,6 +43,9 @@ public class Security {
         return tmpDecrypt.charAt(0) == Message.SECURITY_CODE;
     }
 
+    public static String getDownloadPath(String passs){
+        return "getDownloadPath " +passs;
+    }
 
     /** Encrypt with Vigenere
      * Ban ro: P
@@ -61,7 +53,7 @@ public class Security {
      * Khoa: K
      * C = [P + C � 1] mod total
      */
-    private String vigenereEncrypt(String message, String password){
+    public static String vigenereEncrypt(String message, String password){
         //create key
         String key = VIGENERE_DEFAULT_KEY.charAt(0) + password + VIGENERE_DEFAULT_KEY.substring(1);
         while(key.length() < message.length()){
@@ -93,7 +85,7 @@ public class Security {
      * P = C - K + 1
      * if P < 0 then P += length
      */
-    private String vigenereDecrypt(String message, String password){
+    public static String vigenereDecrypt(String message, String password){
         //Ban ro: P
         //Ma hoa: C
         //Khoa: K
@@ -136,7 +128,7 @@ public class Security {
      * |
      * |
      */
-    private String matrixEncrypt(String message){
+    public static String matrixEncrypt(String message){
         //make standard String
         message = message.trim();
 
@@ -185,7 +177,7 @@ public class Security {
      * --------------->
      * --------------->
      */
-    private String matrixDecrypt(String message){
+    public static String matrixDecrypt(String message){
         int col = MATRIX_COLUMN;
         int row = message.length()/MATRIX_COLUMN;
 

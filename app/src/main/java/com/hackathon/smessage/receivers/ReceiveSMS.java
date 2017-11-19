@@ -92,9 +92,14 @@ public class ReceiveSMS extends BroadcastReceiver {
 
                     if(AppConfigs.getInstance().isStatusBar(isSecurity)){
                         //show Notifu
-                        if(AppConfigs.getInstance().isEnablePassword(isSecurity)){
-                            list.get(0).setUnreadNumber(MessageOpearation.getInstance().getUnreadNumber(list.get(0)));
-                            showNotification(context,list.get(0));
+                        if(!AppConfigs.getInstance().isEnablePassword(isSecurity)){
+                            boolean showUnread = false;
+                            //list.get(0).setUnreadNumber(MessageOpearation.getInstance().getUnreadNumber(list.get(0)));
+                            if (AppConfigs.getInstance().isUnreadMessage(isSecurity)){
+                                showUnread = true;
+                            }
+
+                            showNotification(context,list.get(0),showUnread);
                         }
                     }
 
@@ -150,13 +155,14 @@ public class ReceiveSMS extends BroadcastReceiver {
     }
 
 
-        private void showNotification(Context context,Message message){
+        private void showNotification(Context context,Message message,boolean showUnRead){
 
 
             NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(context)
                             .setSmallIcon(android.R.drawable.stat_notify_chat)
-                            .setContentTitle(message.getPhone()+"("+message.getUnreadNumber()+" tin nhắn)")
+                            .setContentTitle(message.getPhone()+((showUnRead)?"("+MessageOpearation.getInstance().getUnreadNumber(message)
+                                    +" tin nhắn)":""))
                             .setAutoCancel(true)
                             .setContentText(message.getBody())
                             .setPriority(android.support.v7.app.NotificationCompat.PRIORITY_MAX)
